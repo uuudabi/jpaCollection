@@ -1,8 +1,11 @@
 package org.jpa.jpacollection;
 
+import org.jpa.jpacollection.entity.Member;
 import org.jpa.jpacollection.entity.Student;
+import org.jpa.jpacollection.entity.Team;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -44,7 +47,37 @@ class JpaCollectionApplicationTests {
         for(String cours : st1.getCourses()){
             System.out.println(cours);
         }
+    }
 
+    @Test
+    @Transactional
+    @Commit
+    public void testMember(){
+        Team team = Team.builder().teamName("KFC").build();
+        em.persist(team);
+        Member member = Member.builder().name("박지성").team(team).build();
+        em.persist(member);
+        member = Member.builder().name("손흥민").team(team).build();
+        em.persist(member);
+        member = Member.builder().name("차범근").team(team).build();
+        em.persist(member);
+
+        em.flush();
+        em.clear();
+
+
+        member = em.find(Member.class, 1L);
+        System.out.println("-------------------->"+ member);
+        System.out.println(member.getTeam());
+
+//        em.flush();
+//        em.clear();
+//
+//        Team team1 = em.find(Team.class, 1L);
+//        System.out.println(team1);
+//        for (Member member1 : team1.getMemberList()){
+//            System.out.println(member1);
+//        }
     }
 
 }
